@@ -1,0 +1,30 @@
+name: Release v0.1.0
+on:
+  push:
+    paths:
+      - '.github/workflows/release-v0.1.0.yml'
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tested source
+        uses: actions/checkout@v4
+        with:
+          ref: a7b0c87b8fda4fb5429b0384185469229f871dee
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build
+        run: gradle clean build
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.0
+          name: MiraLeaderboards v0.1.0
+          target_commitish: a7b0c87b8fda4fb5429b0384185469229f871dee
+          body: Initial generic Mira leaderboard engine with persistent boards, API-fed scores, text and GUI views, Top 100 ranking and dynamic PlaceholderAPI support.
+          files: build/libs/MiraLeaderboards-0.1.0.jar
