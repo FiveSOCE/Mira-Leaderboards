@@ -1,72 +1,39 @@
 # MiraLeaderboards
 
-Generic leaderboard engine for the Mira Paper 1.21.11 / Java 21 ecosystem.
+MiraLeaderboards is the generic ranking engine for the Mira Paper server suite. It lets other plugins publish named scores into persistent leaderboards instead of each feature maintaining its own ranking implementation.
 
 ## Download
 
-Current release: **v0.1.0**
-
 [**Download MiraLeaderboards v0.1.0**](https://github.com/FiveSOCE/Mira-Leaderboards/releases/download/v0.1.0/MiraLeaderboards-0.1.0.jar)
 
-[View all releases](https://github.com/FiveSOCE/Mira-Leaderboards/releases)
-
-## Features
-
-- unlimited named leaderboards
-- persistent scores
-- score set/add/remove/clear administration
-- Top 100 ranking
-- paginated text views
-- Top 10 podium-style GUI
-- public `MiraLeaderboardsApi` through Bukkit ServicesManager
-- dynamic PlaceholderAPI placeholders for any board
-
-Other Mira plugins can publish scores to this engine instead of each maintaining a separate leaderboard implementation.
-
-## PlaceholderAPI
-
-For any board ID:
-
-```text
-%miraleaderboards_<board>_top_1_name%
-%miraleaderboards_<board>_top_1_score%
-%miraleaderboards_<board>_top_1_formatted%
-```
-
-Ranks 1 through 100 are supported.
-
-## Commands
-
-```text
-/leaderboard <board> [page]
-/mlb set <board> <entry> <score>
-/mlb add <board> <entry> <delta>
-/mlb remove <board> <entry>
-/mlb clear <board>
-/mlb gui <board>
-/mlb list
-```
-
-## Data
-
-```text
-plugins/MiraLeaderboards/leaderboards.yml
-```
-
-## Requirements
+## Requirements / Dependencies
 
 - Paper 1.21.11
 - Java 21
 - PlaceholderAPI optional
 
-## Building
+## How MiraLeaderboards Works
 
-```bash
-gradle clean build
-```
+Any number of named leaderboard IDs can be created. Scores are persistent and can be set, incremented, removed or cleared administratively. Each board supports Top 100 ranking, paginated text output and a Top 10 podium-style GUI.
 
-Output:
+Other Mira plugins can publish scores through the public `MiraLeaderboardsApi`. PlaceholderAPI supports dynamic placeholders for any board ID, including rank name, raw score and formatted score. Data is stored in `plugins/MiraLeaderboards/leaderboards.yml`.
 
-```text
-build/libs/MiraLeaderboards-0.1.0.jar
-```
+## Commands
+
+| Command | Permission | What it does |
+| --- | --- | --- |
+| `/leaderboard <board> [page]` | None required | Shows a leaderboard as paginated text. |
+| `/mlb set <board> <entry> <score>` | `miraleaderboards.admin` | Sets an entry's score. |
+| `/mlb add <board> <entry> <delta>` | `miraleaderboards.admin` | Adds to an entry's score. |
+| `/mlb remove <board> <entry>` | `miraleaderboards.admin` | Removes an entry from a board. |
+| `/mlb clear <board>` | `miraleaderboards.admin` | Clears all entries from a board. |
+| `/mlb gui <board>` | `miraleaderboards.admin` | Opens the podium-style leaderboard GUI. |
+| `/mlb list` | `miraleaderboards.admin` | Lists known leaderboard IDs. |
+
+Aliases: `/lb` for `/leaderboard`, `/mleaderboard` for `/mlb`.
+
+## Permissions
+
+| Permission | Default | What it does |
+| --- | --- | --- |
+| `miraleaderboards.admin` | OP | Allows administrative score and leaderboard management. |
