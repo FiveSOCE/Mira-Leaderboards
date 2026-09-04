@@ -115,11 +115,12 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
                     msg(sender, "&cInvalid score.");
                     return true;
                 }
-                if (action.equals("add")) value += boards.score(args[1], args[2]);
-                if (!boards.setScore(args[1], args[2], value)) {
+                if (BoardService.boardId(args[1]).isBlank() || args[2].isBlank()) {
                     msg(sender, "&cInvalid board or entry.");
                     return true;
                 }
+                if (action.equals("add")) value += boards.score(args[1], args[2]);
+                boards.setScore(args[1], args[2], value);
                 audit(sender, action.equals("add") ? "LEADERBOARD_SCORE_ADDED" : "LEADERBOARD_SCORE_SET",
                         args[1], args[2], value);
                 msg(sender, "&aUpdated &f" + args[2] + " &aon &f" + args[1] + "&a.");
