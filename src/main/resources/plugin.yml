@@ -3,7 +3,8 @@ version: ${version}
 main: com.mira.leaderboards.MiraLeaderboardsPlugin
 api-version: '1.21'
 author: FiveS
-softdepend: [PlaceholderAPI]
+depend: [MiraCore]
+softdepend: [PlaceholderAPI, MiraSeasons, MiraFactions, MiraPinata, MiraBounties, MiraPlaytime, MiraOutposts, MiraCrates]
 commands:
   leaderboard:
     aliases: [lb]
@@ -12,7 +13,7 @@ commands:
   mleaderboard:
     aliases: [mlb]
     description: Manage Mira leaderboards
-    usage: /mleaderboard <set|add|remove|clear|list|gui>
+    usage: /mleaderboard <set|add|remove|clear|list|gui|scope|snapshot>
 permissions:
   miraleaderboards.admin:
     default: op
