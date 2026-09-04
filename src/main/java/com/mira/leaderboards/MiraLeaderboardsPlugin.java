@@ -304,8 +304,9 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
         List<RankedEntry> entries = boards.rankedTop(board, 100);
         PaginationService.Page<RankedEntry> page = core.pagination().page(entries, requestedPage, 45);
 
-        Inventory inventory = Bukkit.createInventory(new BoardHolder(board, page.page()), 54,
-                c("&5" + board + " Leaderboard"));
+        BoardHolder holder = new BoardHolder(board, page.page());
+        Inventory inventory = Bukkit.createInventory(holder, 54, c("&5" + board + " Leaderboard"));
+        holder.inventory = inventory;
         for (int slot = 0; slot < page.values().size(); slot++) {
             RankedEntry entry = page.values().get(slot);
             Material material = switch (entry.rank()) {
@@ -412,8 +413,23 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
                 .distinct().sorted().toList();
     }
 
-    private record BoardHolder(String board, int page) implements InventoryHolder {
-        @Override public @NotNull Inventory getInventory() { throw new UnsupportedOperationException(); }
+    private static final class BoardHolder implements InventoryHolder {
+        private final String board;
+        private final int page;
+        private Inventory inventory;
+
+        private BoardHolder(String board, int page) {
+            this.board = board;
+            this.page = page;
+        }
+
+        String board() { return board; }
+        int page() { return page; }
+
+        @Override
+        public @NotNull Inventory getInventory() {
+            return Objects.requireNonNull(inventory, "Leaderboard inventory not initialized yet");
+        }
     }
 
     public enum BoardScope {
