@@ -1,0 +1,9 @@
+# MiraLeaderboards 0.1.1
+cache-top-n: 100
+snapshot:
+  interval-minutes: 10
+  history-limit: 48
+seasonal:
+  auto-reset-on-season-start: true
+messages:
+  prefix: '&5&lMira &8>> &r'
