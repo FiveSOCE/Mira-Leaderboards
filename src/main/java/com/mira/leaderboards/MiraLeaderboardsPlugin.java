@@ -147,7 +147,7 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
                     msg(sender, "&e/mlb remove <board> <entry-id-or-name>");
                     return true;
                 }
-                boolean removed = boards.remove(args[1], args[2]);
+                boolean removed = boards.removeEntry(args[1], args[2]);
                 msg(sender, removed ? "&aEntry removed." : "&cEntry not found.");
             }
             case "clear" -> {
@@ -155,7 +155,7 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
                     msg(sender, "&e/mlb clear <board>");
                     return true;
                 }
-                int removed = boards.clear(args[1]);
+                int removed = boards.clearEntries(args[1]);
                 core.audit().record("MiraLeaderboards", "LEADERBOARD_CLEARED",
                         sender instanceof Player player ? player.getUniqueId() : null,
                         sender.getName(), args[1], "Cleared leaderboard",
@@ -452,6 +452,8 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
         boolean setScore(String board, String stableId, String displayName, double score);
         boolean addScore(String board, String stableId, String displayName, double delta);
         boolean publish(String source, String board, String stableId, String displayName, double score);
+        boolean removeEntry(String board, String entry);
+        int clearEntries(String board);
         List<RankedEntry> rankedTop(String board, int limit);
         Optional<RankedEntry> rankedEntry(String board, String stableIdOrDisplayName);
         int rank(String board, String stableIdOrDisplayName);
@@ -576,7 +578,7 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
         }
 
         @Override
-        public synchronized boolean remove(String board, String entry) {
+        public synchronized boolean removeEntry(String board, String entry) {
             String id = boardId(board);
             Board target = boards.get(id);
             if (target == null) return false;
@@ -590,11 +592,11 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
 
         @Override
         public synchronized void remove(String board, String entry) {
-            remove(board, entry);
+            removeEntry(board, entry);
         }
 
         @Override
-        public synchronized int clear(String board) {
+        public synchronized int clearEntries(String board) {
             String id = boardId(board);
             Board target = boards.get(id);
             if (target == null) return 0;
@@ -607,7 +609,7 @@ public final class MiraLeaderboardsPlugin extends JavaPlugin implements Listener
 
         @Override
         public synchronized void clear(String board) {
-            clear(board);
+            clearEntries(board);
         }
 
         @Override
